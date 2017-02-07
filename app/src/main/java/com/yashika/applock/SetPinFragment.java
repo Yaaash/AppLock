@@ -10,7 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.yashika.applock.utils.SessionPreferences;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,9 +29,12 @@ public class SetPinFragment extends AppLockFragment {
     TextView statusSubtitleTextView;
     @BindView(R.id.pin_edit_text)
     EditText pinEditText;
+    @BindView(R.id.status_text_view)
+    TextView statusTextView;
     private StringBuilder inputPin;
     private String oldPin;
     private boolean pinReEnterCase = true;
+    private boolean isLogIn = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class SetPinFragment extends AppLockFragment {
         ButterKnife.bind(this, view);
         statusSubtitleTextView.setText(getResources().getString(R.string.enter_pin));
         pinEditText.addTextChangedListener(new PinTextWatcher());
+        setViews();
         return view;
     }
 
@@ -53,6 +58,18 @@ public class SetPinFragment extends AppLockFragment {
         super.onActivityCreated(savedInstanceState);
         if(getAppLockActivity() != null && getAppLockActivity().getSupportActionBar() != null) {
             getAppLockActivity().getSupportActionBar().hide();
+        }
+    }
+
+    private void setViews() {
+        if(!TextUtils.isEmpty(SessionPreferences.INSTANCE.getPin())) {
+            // pin is already set
+            statusTextView.setText("");
+            isLogIn = true;
+        } else {
+            // set the pin
+            statusTextView.setText(R.string.set_your_6_digit_pin);
+            isLogIn = false;
         }
     }
 
@@ -118,18 +135,31 @@ public class SetPinFragment extends AppLockFragment {
     }
 
     private void validatePin() {
-        if(!TextUtils.isEmpty(oldPin)) {
-            //this is the case of pin creation.
-            //match the 2 pins and do the needful.
-            if(oldPin.equals(inputPin.toString())) {
-                SessionPreferences.INSTANCE.setPin(pinEditText.getText().toString());
-                // TODO: 06-02-2017 switch to next fragment
+        if(isLogIn) {
+            if(getAppLockActivity() != null && !TextUtils.isEmpty(pinEditText.getText().toString()) &&
+                    !TextUtils.isEmpty(SessionPreferences.INSTANCE.getPin()) &&
+                    SessionPreferences.INSTANCE.getPin().equals(pinEditText.getText().toString())) {
+                getAppLockActivity().switchToFragment(new AllAppsFragment());
             } else {
-                statusSubtitleTextView.setText(getResources().getString(R.string.pin_mismatch));
+                statusSubtitleTextView.setText(R.string.pin_mismatch);
                 pinEditText.setText("");
-                inputPin.delete(0, inputPin.length());
-                oldPin = "";
-                pinReEnterCase = true;
+            }
+        } else {
+            if(!TextUtils.isEmpty(oldPin)) {
+                //this is the case of pin creation.
+                //match the 2 pins and do the needful.
+                if(oldPin.equals(inputPin.toString())) {
+                    SessionPreferences.INSTANCE.setPin(pinEditText.getText().toString());
+                    if(getAppLockActivity() != null) {
+                        getAppLockActivity().switchToFragment(new AllAppsFragment());
+                    }
+                } else {
+                    statusSubtitleTextView.setText(getResources().getString(R.string.pin_mismatch));
+                    pinEditText.setText("");
+                    inputPin.delete(0, inputPin.length());
+                    oldPin = "";
+                    pinReEnterCase = true;
+                }
             }
         }
     }
@@ -154,12 +184,17 @@ public class SetPinFragment extends AppLockFragment {
         @Override
         public void onTextChanged(CharSequence s, int i, int i1, int i2) {
             if(s.length() == PIN_LENGTH) {
-                //re-enter pin.
-                if(pinReEnterCase) {
-                    oldPin = inputPin.toString();
-                    reEnterPin();
-                } else {
+                if(isLogIn) {
+                    // no re-enter pin screen will be shown
                     validatePin();
+                } else {
+                    //re-enter pin.
+                    if(pinReEnterCase) {
+                        oldPin = inputPin.toString();
+                        reEnterPin();
+                    } else {
+                        validatePin();
+                    }
                 }
             }
         }

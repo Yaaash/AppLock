@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/app_icon_image_view"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="@integer/int_1"
+        android:contentDescription="@null"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/app_name_text_view"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="@integer/int_3"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:padding="@dimen/size_5"
+        android:textSize="@dimen/font_14"/>
+
+    <Switch
+        android:id="@+id/app_switch"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="@integer/int_1"/>
+</LinearLayout>

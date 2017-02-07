@@ -15,4 +15,7 @@
     <string name="enter_pin">Enter pin</string>
     <string name="reenter_pin">Re-Enter Pin</string>
     <string name="pin_mismatch">Pin did not match.</string>
+    <string name="all_apps">All Apps</string>
+    <string name="notification_state_locked">L</string>
+    <string name="notification_title">n</string>
 </resources>

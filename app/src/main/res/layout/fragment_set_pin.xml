@@ -6,13 +6,22 @@
     android:background="@color/black"
     android:gravity="center">
 
+    <ImageView
+        android:id="@+id/app_icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/size_10"
+        android:visibility="gone"
+        android:contentDescription="@null"/>
+
     <TextView
         android:id="@+id/status_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/app_icon_image_view"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/size_5"
-        android:text="@string/set_your_6_digit_pin"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
         android:textSize="@dimen/font_20"/>
@@ -39,8 +48,8 @@
         android:layout_marginBottom="@dimen/size_10"
         android:background="@android:color/transparent"
         android:enabled="false"
-        android:hint="@null"
         android:gravity="center"
+        android:hint="@null"
         android:inputType="numberPassword"
         android:maxLength="@dimen/pin_max_length"
         android:textColor="@android:color/white"/>
