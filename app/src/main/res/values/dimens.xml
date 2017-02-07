@@ -20,4 +20,5 @@
     <item name="pin_weight" format="integer" type="dimen">1</item>
     <dimen name="size_6">6dp</dimen>
     <dimen name="font_25">25sp</dimen>
+    <dimen name="font_15">15sp</dimen>
 </resources>
